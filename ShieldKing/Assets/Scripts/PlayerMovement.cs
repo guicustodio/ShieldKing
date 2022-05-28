@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody rb;
     GameObject shield;
 
+    Vector3 lookTarget;
 
     void Start()
     {
@@ -41,6 +42,19 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            lookTarget = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+
+        }
+        transform.LookAt(lookTarget);
+
+
         groundedPlayer = controller.isGrounded;
         if (groundedPlayer && playerVelocity.y < 0)
         {

@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 
     Transform tr_Player;
     float f_RotSpeed = 3.0f, f_MoveSpeed = 3.0f;
-    public GameObject enemy;
+    //public GameObject enemy;
 
     // Use this for initialization
     void Start()
@@ -25,14 +25,14 @@ public class Enemy : MonoBehaviour
         /* Move at Player*/
         transform.position += transform.forward * f_MoveSpeed * Time.deltaTime;
 
-        StartCoroutine(SpawnEnemies());
+        //StartCoroutine(SpawnEnemies());
     }
 
 
-    IEnumerator SpawnEnemies()
+    /*IEnumerator SpawnEnemies()
     {
         Instantiate(enemy, new Vector3(2.0f, 0, 0), Quaternion.identity);
 
         yield return new WaitForSeconds(5);
-    }
+    }*/
 }

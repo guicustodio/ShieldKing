@@ -25,6 +25,7 @@ public class PlayerAttack : MonoBehaviour
     {
      
     }
+    
     void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.gameObject.CompareTag("Enemy"))
@@ -40,6 +41,15 @@ public class PlayerAttack : MonoBehaviour
                 col.AddForce(direction.normalized * pushForce, ForceMode.Impulse);
             }
             //col.AddExplosionForce(pushForce, transform.position, radius);
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.collider.gameObject.CompareTag("Enemy"))
+        {
+            Rigidbody col = collision.collider.GetComponent<Rigidbody>();
+            col.AddForce(Vector3.zero);
         }
     }
 

@@ -27,7 +27,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private bool isShielding = false;
 
-    Rigidbody rb;
     GameObject shield;
 
     Vector3 lookTarget;
@@ -35,25 +34,29 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         controller = gameObject.AddComponent<CharacterController>();
-        rb = GetComponent<Rigidbody>();
         shield = GameObject.FindGameObjectWithTag("Shield");
         shield.SetActive(false);
     }
 
     void Update()
     {
-
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var view = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        var isOutsideGameWindow = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 0.9f;
 
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit))
         {
             lookTarget = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-
         }
-        transform.LookAt(lookTarget);
 
+        if (!isOutsideGameWindow)
+        {
+            transform.LookAt(lookTarget);
+        } else {
+            transform.rotation.x.Equals(0);
+        }
 
         groundedPlayer = controller.isGrounded;
         if (groundedPlayer && playerVelocity.y < 0)
@@ -96,10 +99,12 @@ public class PlayerMovement : MonoBehaviour
         if (isShielding && Input.GetMouseButtonDown(0))
         {
             print("dashing");
-            playerVelocity += Vector3.Scale(transform.forward,
-                                      DashDistance * new Vector3((Mathf.Log(1f / (Time.deltaTime * Drag.x + 1)) / -Time.deltaTime),
-                                                                 0,
-                                                                 (Mathf.Log(1f / (Time.deltaTime * Drag.z + 1)) / -Time.deltaTime)));
+            playerVelocity += Vector3.Scale(transform.forward, DashDistance * new Vector3(
+                                           (Mathf.Log(1f / (Time.deltaTime * Drag.x + 1)) / -Time.deltaTime), 
+                                           0,
+                                           (Mathf.Log(1f / (Time.deltaTime * Drag.z + 1)) / -Time.deltaTime)));
         }
+
+        Debug.Log(isShielding);
     }
 }
